@@ -17,7 +17,9 @@ func handleHttp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Write(db.ServePOST(raw, r.Header.Get("Authorization")))
+		resp := db.ServePOST(raw, r.Header.Get("Authorization"))
+		w.WriteHeader(resp.Status())
+		w.Write(resp.Byte())
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
